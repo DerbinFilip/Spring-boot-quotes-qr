@@ -1,4 +1,4 @@
-package com.derbin.petclinic.controller;
+package com.derbin.petclinic.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -22,5 +22,4 @@ class WebConfig implements WebMvcConfigurer {
                         "classpath:/static/css/",
                         "classpath:/static/js/");
     }
-
 }

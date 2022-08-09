@@ -2,6 +2,8 @@ package com.derbin.petclinic.controller;
 
 import com.derbin.petclinic.service.QrCodeService;
 import com.derbin.petclinic.service.QuotesService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,10 @@ import java.util.TimerTask;
 public class QrCodeController {
     private static final String QR_PATH = "./src/main/resources/static/img/QRCODE.png";
     private final QuotesService quotesService;
+    private static final int WIDTH = 250;
+    private static final int HEIGHT = 250;
+    private static final int DELAY = 5000;
+    private static final Logger logger = LogManager.getLogger(QrCodeController.class);
 
     public QrCodeController(QuotesService quotesService) {
         this.quotesService = quotesService;
@@ -28,18 +34,17 @@ public class QrCodeController {
         String text1 = quotesService.getQuotesById(quotesService.randomQuotes()).getText();
 
         byte[] image = new byte[0];
-
         try {
-            image = QrCodeService.getQR(text, 250, 250);
-            QrCodeService.generateQR(text1, 250, 250, QR_PATH);
+            image = QrCodeService.getQR(text, WIDTH, HEIGHT);
+            QrCodeService.generateQR(text1, WIDTH, HEIGHT, QR_PATH);
             new Timer().schedule(new TimerTask() {
                 @Override
                 public void run() {
                     deleteImage();
                 }
-            }, 5000);
+            }, DELAY);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
 
         String qrCode = Base64.getEncoder().encodeToString(image);
@@ -49,11 +54,12 @@ public class QrCodeController {
         model.addAttribute("qrcode", qrCode);
         return "qrcode";
     }
-    public void deleteImage(){
+
+    public void deleteImage() {
         try {
             Files.delete(Path.of(QR_PATH));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 }

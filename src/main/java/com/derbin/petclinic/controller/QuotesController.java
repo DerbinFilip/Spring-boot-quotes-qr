@@ -37,7 +37,7 @@ public class QuotesController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteQuotes(@RequestBody final Long id) {
+    public void deleteQuotes(@PathVariable final Long id) {
         quotesService.deleteQuotes(id);
     }
 }

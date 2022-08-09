@@ -21,31 +21,35 @@ public class Pets {
         return id;
     }
 
-    public void setId(Long id) {
+    public Pets setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public Pets setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getBreed() {
         return breed;
     }
 
-    public void setBreed(String breed) {
+    public Pets setBreed(String breed) {
         this.breed = breed;
+        return this;
     }
 
     public Long getAge() {
         return age;
     }
 
-    public void setAge(Long age) {
+    public Pets setAge(Long age) {
         this.age = age;
+        return this;
     }
 }

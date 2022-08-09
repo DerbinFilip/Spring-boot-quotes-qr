@@ -1,5 +1,7 @@
 package com.derbin.petclinic.service;
 
+import com.derbin.petclinic.exception.ApplicationException;
+import com.derbin.petclinic.exception.PetNotFoundException;
 import com.derbin.petclinic.exception.UpdatingEntityWithoutIdException;
 import com.derbin.petclinic.model.Pets;
 import com.derbin.petclinic.repository.PetsRepo;
@@ -16,7 +18,13 @@ public class PetService {
     }
 
     public Pets createPet(final Pets pets) {
+        if (getByName(pets))
+            throw new ApplicationException("Pet already exists with this name!");
         return petsRepo.save(pets);
+    }
+
+    private boolean getByName(Pets pets) {
+        return petsRepo.findByName(pets.getName()) != null;
     }
 
     public Pets updatePet(final Pets pets) {
@@ -27,7 +35,8 @@ public class PetService {
     }
 
     public Pets getPetById(final Long id) {
-        return petsRepo.findById(id).orElseThrow();
+        return petsRepo.findById(id).orElseThrow(
+                () -> new PetNotFoundException("Couldn't find pet with id: " + id));
     }
 
     public List<Pets> getAllPets() {
